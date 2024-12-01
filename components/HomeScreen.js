@@ -13,8 +13,7 @@ export default function HomeScreen({ navigation }) {
 
       {/* Logo Section */}
       <View style={styles.logoContainer}>
-        <Image source={require('../assets/grocery-bag.png')} style={styles.logo} />
-        <Text style={styles.logoText}>GrocerMate</Text>
+        <Image source={require('../assets/grocermatelogo.png')} style={styles.logo} />
       </View>
 
       {/* Button Grid */}
@@ -58,15 +57,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: '#000', // Black color for icons
+    marginVertical:30,
   },
   logoContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 40,
   },
   logo: {
-    width: 80,
-    height: 80,
-    marginBottom: 10,
+    width: 150,
+    height: 125,
+    marginBottom: 30,
   },
   logoText: {
     fontSize: 24,
