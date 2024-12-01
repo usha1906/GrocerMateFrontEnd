@@ -1,22 +1,16 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
-// Replace with your Firebase config from the Firebase Console
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
-};
+    apiKey: "AIzaSyCRnbMOTi3ZwB2lUisvEpg4OY4MELBIZrk",
+    authDomain: "grocermate-web-fe131.firebaseapp.com",
+    projectId: "grocermate-web-fe131",
+    storageBucket: "grocermate-web-fe131.firebasestorage.app",
+    messagingSenderId: "797592273289",
+    appId: "1:797592273289:web:d0c76c948c3c4f5b22a158"
+  };
+  
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore (Database) and Authentication
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-export { db, auth };
+const db = getFirestore(app); // Ensure this is exported correctly
+export { db };
