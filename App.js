@@ -1,9 +1,13 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./components/HomeScreen"; // Adjust the path if needed
-import ScheduleScreen from "./components/ScheduleScreen"; // Adjust the path if needed
-import TaskScreen from "./components/TaskScreen";
+import HomeScreen from "./components/HomeScreen";
+import ScheduleScreen from "./components/ScheduleScreen";
+import TaskScreen from "./components/TaskScreen"; // Ensure TaskScreen is imported
+import CreateListPage from './components/createlist';
+import AddItemsPage from './components/additem';
+import NewItemPage from "./components/newitem";
+import ChooseListPage from "./components/chooselist";
 
 const Stack = createStackNavigator();
 
@@ -19,12 +23,32 @@ export default function App() {
         <Stack.Screen
           name="Schedule"
           component={ScheduleScreen}
-          options={{ title: "Schedule Tasks" }}
+          options={{ title: "Schedule" }}
         />
         <Stack.Screen
           name="TaskScreen"
           component={TaskScreen}
           options={{ title: "Tasks" }}
+        />
+        <Stack.Screen
+          name="CreateList"
+          component={CreateListPage}
+          options={{ title: 'Create List' }}
+        />
+        <Stack.Screen
+          name="AddItems"
+          component={AddItemsPage}
+          options={{ title: 'Add Item' }}
+        />
+        <Stack.Screen
+          name="NewItem"
+          component={NewItemPage}
+          options={{ title: 'New Item' }}
+        />
+        <Stack.Screen
+          name="ChooseList"
+          component={ChooseListPage}
+          options={{ title: 'Choose List' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

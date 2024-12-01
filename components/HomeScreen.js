@@ -18,12 +18,12 @@ export default function HomeScreen({ navigation }) {
 
       {/* Button Grid */}
       <View style={styles.buttonGrid}>
-        <TouchableOpacity style={styles.button} onPress={() => console.log('Create Shared List Pressed')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateList')}>
           <Icon name="playlist-edit" size={30} style={styles.buttonIcon} />
           <Text style={styles.buttonText}>Create Shared List</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => console.log('Edit/Add Item Pressed')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ChooseList')}>
           <Icon name="note-edit-outline" size={30} style={styles.buttonIcon} />
           <Text style={styles.buttonText}>Edit / Add Item on List</Text>
         </TouchableOpacity>

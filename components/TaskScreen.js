@@ -7,18 +7,16 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
-  Button
 } from "react-native";
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function TaskScreen({ route }) {
-  const { selectedDate } = route.params;
+  const { selectedDate } = route.params; // Get the selected date from navigation
   const [tasks, setTasks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editMode, setEditMode] = useState(false); // To track if we're editing
-  const [selectedTask, setSelectedTask] = useState(null); // Currently selected task for editing
+  const [editMode, setEditMode] = useState(false); // Flag to check if editing a task
+  const [taskId, setTaskId] = useState(null); // Track task being edited
 
   // Task form fields
   const [title, setTitle] = useState("");
@@ -44,7 +42,7 @@ export default function TaskScreen({ route }) {
     }
   };
 
-  // Save or Edit a Task
+  // Save a new or updated task
   const saveTask = async () => {
     if (!title || !startTime || !endTime) {
       alert("Please fill out all fields!");
@@ -53,54 +51,65 @@ export default function TaskScreen({ route }) {
     try {
       if (editMode) {
         // Update existing task
-        const taskRef = doc(db, "users", "alice", "tasks", selectedTask.id);
-        await updateDoc(taskRef, { title, startTime, endTime, notes });
+        const taskRef = doc(db, "users", "alice", "tasks", taskId);
+        await updateDoc(taskRef, {
+          title,
+          startTime,
+          endTime,
+          notes,
+        });
         alert("Task updated successfully!");
       } else {
         // Add new task
-        const newTask = { title, date: selectedDate, startTime, endTime, notes };
+        const newTask = {
+          title,
+          date: selectedDate,
+          startTime,
+          endTime,
+          notes,
+        };
         await addDoc(collection(db, "users", "alice", "tasks"), newTask);
         alert("Task added successfully!");
       }
       setModalVisible(false);
       fetchTasks();
-      clearForm();
+      resetForm();
     } catch (error) {
       console.error("Error saving task:", error);
     }
   };
 
-  // Delete a Task
-  const deleteTask = async (taskId) => {
+  // Delete a task
+  const deleteTask = async (id) => {
     try {
-      const taskRef = doc(db, "users", "alice", "tasks", taskId);
+      const taskRef = doc(db, "users", "alice", "tasks", id);
       await deleteDoc(taskRef);
       alert("Task deleted successfully!");
-      fetchTasks(); // Refresh tasks
+      fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
-  // Open the modal for editing a task
-  const openEditModal = (task) => {
+  // Reset form fields
+  const resetForm = () => {
+    setTitle("");
+    setStartTime("");
+    setEndTime("");
+    setNotes("");
+    setEditMode(false);
+    setTaskId(null);
+  };
+
+  // Open modal to edit a task
+  const editTask = (task) => {
     setEditMode(true);
-    setSelectedTask(task);
+    setTaskId(task.id);
     setTitle(task.title);
     setStartTime(task.startTime);
     setEndTime(task.endTime);
     setNotes(task.notes);
     setModalVisible(true);
-  };
-
-  // Clear the form fields
-  const clearForm = () => {
-    setEditMode(false);
-    setSelectedTask(null);
-    setTitle("");
-    setStartTime("");
-    setEndTime("");
-    setNotes("");
   };
 
   useEffect(() => {
@@ -122,12 +131,12 @@ export default function TaskScreen({ route }) {
               </Text>
               <Text style={styles.taskNotes}>{item.notes}</Text>
             </View>
-            <View style={styles.iconContainer}>
-              <TouchableOpacity onPress={() => openEditModal(item)}>
-                <Icon name="edit" size={24} color="black" />
+            <View style={styles.taskActions}>
+              <TouchableOpacity onPress={() => editTask(item)}>
+                <Text style={styles.editIcon}>✏️</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteTask(item.id)}>
-                <Icon name="delete" size={24} color="black" />
+                <Text style={styles.deleteIcon}>🗑️</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -139,7 +148,10 @@ export default function TaskScreen({ route }) {
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => setModalVisible(true)}
+        onPress={() => {
+          resetForm();
+          setModalVisible(true);
+        }}
       >
         <Text style={styles.addButtonText}>+ Add Task</Text>
       </TouchableOpacity>
@@ -174,15 +186,20 @@ export default function TaskScreen({ route }) {
               onChangeText={setNotes}
             />
             <View style={styles.modalButtons}>
-              <Button title={editMode ? "Save Changes" : "Save Task"} onPress={saveTask} />
-              <Button
-                title="Cancel"
-                color="red"
-                onPress={() => {
-                  setModalVisible(false);
-                  clearForm();
-                }}
-              />
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={saveTask}
+              >
+                <Text style={styles.saveButtonText}>
+                  {editMode ? "Save Changes" : "Add Task"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -230,6 +247,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#888888",
   },
+  taskActions: {
+    flexDirection: "row",
+  },
+  editIcon: {
+    fontSize: 20,
+    marginRight: 10,
+    color: "#0000FF",
+  },
+  deleteIcon: {
+    fontSize: 20,
+    color: "#FF0000",
+  },
   addButton: {
     backgroundColor: "#F3A800",
     padding: 15,
@@ -255,10 +284,11 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#F3A800",
     marginBottom: 20,
+    textAlign: "center",
   },
   input: {
     backgroundColor: "#F3F3F3",
@@ -266,10 +296,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
-  iconContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: 60,
+  saveButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  saveButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: "#FF5722",
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  cancelButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
