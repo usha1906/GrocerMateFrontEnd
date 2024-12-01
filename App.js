@@ -33,7 +33,7 @@ export default function App() {
         <Stack.Screen
           name="CreateList"
           component={CreateListPage}
-          options={{ title: 'Create List' }}
+          options={{ title: 'CreateList' }}
         />
         <Stack.Screen
           name="AddItems"
@@ -48,7 +48,7 @@ export default function App() {
         <Stack.Screen
           name="ChooseList"
           component={ChooseListPage}
-          options={{ title: 'Choose List' }}
+          options={{ title: 'ChooseList' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
