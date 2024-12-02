@@ -8,6 +8,7 @@ import CreateListPage from './components/createlist';
 import AddItemsPage from './components/additem';
 import NewItemPage from "./components/newitem";
 import ChooseListPage from "./components/chooselist";
+import EditListPage from "./components/editlist";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,11 @@ export default function App() {
           name="ChooseList"
           component={ChooseListPage}
           options={{ title: 'ChooseList' }}
+        />
+        <Stack.Screen
+          name="EditList"
+          component={EditListPage}
+          options={{ title: 'EditList' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

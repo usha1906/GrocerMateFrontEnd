@@ -8,7 +8,7 @@ export default function HomeScreen({ navigation }) {
       {/* Top Navigation Icons */}
       <View style={styles.topIcons}>
         <Icon name="home-outline" size={40} style={styles.icon} />
-        <Icon name="account-outline" size={40} style={styles.icon} />
+        <Icon name="alarm-bell" size={40} style={styles.icon} />
       </View>
 
       {/* Logo Section */}
