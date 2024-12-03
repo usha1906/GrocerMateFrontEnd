@@ -9,6 +9,7 @@ import AddItemsPage from './components/additem';
 import NewItemPage from "./components/newitem";
 import ChooseListPage from "./components/chooselist";
 import EditListPage from "./components/editlist";
+import NotificationPage from "./components/notification";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,11 @@ export default function App() {
           name="EditList"
           component={EditListPage}
           options={{ title: 'EditList' }}
+        />
+        <Stack.Screen
+          name="NotificationPage"
+          component={NotificationPage}
+          options={{ title: 'Notifications' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

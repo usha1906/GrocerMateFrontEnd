@@ -8,7 +8,9 @@ export default function HomeScreen({ navigation }) {
       {/* Top Navigation Icons */}
       <View style={styles.topIcons}>
         <Icon name="home-outline" size={40} style={styles.icon} />
-        <Icon name="alarm-bell" size={40} style={styles.icon} />
+        <Icon name="alarm-bell" size={40} style={styles.icon} onPress={()=> {
+          navigation.navigate('NotificationPage')}
+        } />
       </View>
 
       {/* Logo Section */}
